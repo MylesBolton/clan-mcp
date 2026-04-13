@@ -109,5 +109,8 @@ def config_check(flake_path: str = "."):
     """Validate clan configuration."""
     return run_clan(["config", "check", "--flake", flake_path])
 
+def main():
+    mcp.run("stdio")
+
 if __name__ == "__main__":
-    mcp.run()
+    main()

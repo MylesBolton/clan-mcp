@@ -21,7 +21,7 @@ dev = [
 ]
 
 [project.scripts]
-clan-mcp = "clan_mcp:mcp.run"
+clan-mcp = "clan_mcp:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["clan_mcp"]
