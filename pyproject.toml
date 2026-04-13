@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "clan-mcp"
+version = "0.1.0"
+description = "MCP server for Clan management"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastmcp",
+]
+
+[project.scripts]
+clan-mcp = "clan_mcp:mcp.run"
+
+[tool.hatch.build.targets.wheel]
+packages = ["clan_mcp"]
