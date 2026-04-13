@@ -2,7 +2,7 @@ import subprocess
 import os
 import json
 from typing import Optional, Dict, Any
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 
 mcp = FastMCP("Clan Management Pro")
 
