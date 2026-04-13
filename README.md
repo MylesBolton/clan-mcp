@@ -1,4 +1,4 @@
-# Clan Management Pro MCP
+# Clan Management (Pro AI Slop) MCP
 
 MCP server for [Clan](https://github.com/clan-lol/clan-core). Manage NixOS machines via LLM.
 
