@@ -5,11 +5,19 @@ build-backend = "hatchling.build"
 [project]
 name = "clan-mcp"
 version = "0.1.0"
-description = "MCP server for Clan management"
+description = "Model Context Protocol server for Clan management"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
+license = {text = "MIT"}
 dependencies = [
     "fastmcp",
+]
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "ruff",
+    "mypy",
 ]
 
 [project.scripts]
@@ -17,3 +25,33 @@ clan-mcp = "clan_mcp:mcp.run"
 
 [tool.hatch.build.targets.wheel]
 packages = ["clan_mcp"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["clan_mcp"]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+]
+ignore = ["E402", "E203"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+no_implicit_reexport = true
+namespace_packages = true
+explicit_package_bases = true
+allow_untyped_decorators = true
+
+[[tool.mypy.overrides]]
+module = "fastmcp.*"
+ignore_missing_imports = true

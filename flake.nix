@@ -35,7 +35,6 @@
 
           pythonRelaxDeps = true;
           dontCheckRuntimeDeps = true;
-          # Adjust if you have actual tests later
           doCheck = false;
 
           meta = {
@@ -57,6 +56,8 @@
         overlays.default = final: _: {
           clan-mcp = mkClanMcp { pkgs = final; };
         };
+
+        lib.mkClanMcp = mkClanMcp;
       };
 
       perSystem =
@@ -82,20 +83,48 @@
           packages = rec {
             clan-mcp = mkClanMcp { inherit pkgs; };
             default = clan-mcp;
+
+            docker = pkgs.dockerTools.buildLayeredImage {
+              name = "ghcr.io/clan-project/clan-mcp";
+              tag = clan-mcp.version;
+              created =
+                let
+                  d = self.lastModifiedDate;
+                in
+                "${builtins.substring 0 4 d}-${builtins.substring 4 2 d}-${builtins.substring 6 2 d}T${builtins.substring 8 2 d}:${builtins.substring 10 2 d}:${builtins.substring 12 2 d}Z";
+              contents = [
+                clan-mcp
+                pkgs.cacert
+              ];
+              config = {
+                Entrypoint = [ (pkgs.lib.getExe clan-mcp) ];
+                Env = [
+                  "SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
+                ];
+              };
+            };
           };
 
           apps = rec {
             clan-mcp = {
               type = "app";
               program = pkgs.lib.getExe self.packages.${system}.clan-mcp;
-              meta.description = "Clan Management Pro MCP server";
+              meta.description = "MCP server for Clan management";
             };
             default = clan-mcp;
           };
 
+          formatter = pkgs.nixfmt-rfc-style;
+
           devShells.default = pkgs.mkShell {
             inputsFrom = [ self.packages.${system}.clan-mcp ];
-            packages = [ pkgs.python3 ];
+            packages = with pkgs.python3Packages; [
+              pkgs.python3
+              hatchling
+              build
+              ruff
+              mypy
+            ];
           };
         };
     };
