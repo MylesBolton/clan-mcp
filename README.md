@@ -17,7 +17,7 @@ MCP server for [Clan](https://github.com/clan-lol/clan-core). Manage NixOS machi
 Run directly with Nix:
 
 ```bash
-nix run github:utensils/mcp-clan -- [args]
+nix run github:MylesBolton/mcp-clan -- [args]
 ```
 
 ### NixOS / Home Manager Configuration
@@ -29,7 +29,7 @@ Add to your MCP server configuration:
   "mcpServers": {
     "clan": {
       "command": "nix",
-      "args": ["run", "github:utensils/mcp-clan", "--"]
+      "args": ["run", "github:MylesBolton/mcp-clan", "--"]
     }
   }
 }
