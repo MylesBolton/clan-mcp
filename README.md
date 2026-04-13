@@ -1,14 +1,6 @@
-(all code generated with gemini inculding readme)
-
 # Clan Management Pro MCP
 
 MCP server for [Clan](https://github.com/clan-lol/clan-core). Manage NixOS machines via LLM.
-
-## Prerequisites
-
-- `clan` CLI installed and in PATH.
-- Python 3.10+.
-- `mcp` Python package.
 
 ## Features
 
@@ -20,31 +12,35 @@ MCP server for [Clan](https://github.com/clan-lol/clan-core). Manage NixOS machi
 
 ## Usage
 
-### Local Development
+### Nix Run
+
+Run directly with Nix:
 
 ```bash
-python clan-mcp.py
+nix run github:utensils/mcp-clan -- [args]
 ```
 
-### Gemini CLI Integration
+### NixOS / Home Manager Configuration
 
-Run with `gemini-cli`:
-
-```bash
-gemini --mcp python clan-mcp.py
-```
-
-Or add to `~/.config/gemini/config.json`:
+Add to your MCP server configuration:
 
 ```json
 {
   "mcpServers": {
     "clan": {
-      "command": "python",
-      "args": ["/absolute/path/to/clan-mcp/clan-mcp.py"]
+      "command": "nix",
+      "args": ["run", "github:utensils/mcp-clan", "--"]
     }
   }
 }
+```
+
+### Local Development
+
+Enter development shell:
+
+```bash
+nix develop
 ```
 
 ## Tools
