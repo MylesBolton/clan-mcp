@@ -57,7 +57,9 @@ nix develop
 | `vars_get`              | Retrieve decrypted var value.                     |
 | `template_list`         | List available clan templates.                    |
 | `template_apply`        | Apply a template to a machine.                    |
-| `config_check`          | Validate clan configuration.                      |
+| `vars_check`            | Check if vars are up to date for a machine.       |
+| `clan_select`           | Query Nix values from the flake using patterns.   |
+| `nix_eval`              | Evaluate any Nix attribute in the flake (as JSON).|
 | `docs_list`            | List all documentation files.                     |
 | `docs_read`            | Read specific documentation file.                 |
 | `docs_search`          | Search for query in documentation markdown files. |

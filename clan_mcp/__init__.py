@@ -38,8 +38,8 @@ async def run_command(cmd: str, args: list[str], parse_json: bool = False) -> Un
 
 async def run_clan(args: list[str], parse_json: bool = False) -> Union[str, Any]:
     """Run clan CLI asynchronously and return output."""
-    if parse_json:
-        args = args + ["--json"]
+    # The clan CLI does not support --json for most subcommands yet.
+    # We remove the blind addition of --json and handle the output as text.
     return await run_command("clan", args, parse_json=parse_json)
 
 @mcp.tool()
@@ -66,6 +66,14 @@ async def nix_build(attr: str, flake_path: str = "."):
     """Build a nix attribute."""
     return await run_command("nix", ["build", f"{flake_path}#{attr}", "--no-link"])
 
+@mcp.tool()
+async def nix_eval(attr: str, flake_path: str = ".", apply: Optional[str] = None):
+    """Evaluate a nix attribute and return JSON. (e.g. attr='nixosConfigurations.machine1.config.services.nginx.enable')"""
+    args = ["eval", f"{flake_path}#{attr}", "--json"]
+    if apply:
+        args.extend(["--apply", apply])
+    return await run_command("nix", args, parse_json=True)
+
 @mcp.resource("clan://config/main")
 async def get_clan_config() -> str:
     """Read primary clan config (clan.nix or flake.nix)."""
@@ -80,7 +88,7 @@ async def get_clan_config() -> str:
 @mcp.tool()
 async def machine_list(flake_path: str = "."):
     """List all machines in clan."""
-    return await run_clan(["machines", "list", "--flake", flake_path], parse_json=True)
+    return await run_clan(["machines", "list", "--flake", flake_path])
 
 @mcp.tool()
 async def machine_create(name: str, flake_path: str = "."):
@@ -119,7 +127,7 @@ async def vars_generate(machine: Optional[str] = None, flake_path: str = ".", re
 @mcp.tool()
 async def vars_list(machine: str, flake_path: str = "."):
     """List vars for specific machine."""
-    return await run_clan(["vars", "list", machine, "--flake", flake_path], parse_json=True)
+    return await run_clan(["vars", "list", machine, "--flake", flake_path])
 
 @mcp.tool()
 async def vars_get(machine: str, var_id: str, flake_path: str = "."):
@@ -136,7 +144,7 @@ async def vars_upload(machine: str, flake_path: str = "."):
 @mcp.tool()
 async def template_list():
     """List available clan templates."""
-    return await run_clan(["templates", "list"], parse_json=True)
+    return await run_clan(["templates", "list"])
 
 @mcp.tool()
 async def template_apply(template: str, machine: str, settings: Optional[Dict[str, str]] = None, flake_path: str = "."):
@@ -152,7 +160,7 @@ async def template_apply(template: str, machine: str, settings: Optional[Dict[st
 @mcp.tool()
 async def backups_list(machine: str, flake_path: str = "."):
     """List backups for a machine."""
-    return await run_clan(["backups", "list", machine, "--flake", flake_path], parse_json=True)
+    return await run_clan(["backups", "list", machine, "--flake", flake_path])
 
 @mcp.tool()
 async def backups_restore(machine: str, backup_id: str, flake_path: str = "."):
@@ -162,9 +170,18 @@ async def backups_restore(machine: str, backup_id: str, flake_path: str = "."):
 # --- Validation ---
 
 @mcp.tool()
-async def config_check(flake_path: str = "."):
-    """Validate clan configuration."""
-    return await run_clan(["config", "check", "--flake", flake_path])
+async def vars_check(machine: Optional[str] = None, flake_path: str = "."):
+    """Check if vars are up to date."""
+    args = ["vars", "check"]
+    if machine:
+        args.append(machine)
+    args.extend(["--flake", flake_path])
+    return await run_clan(args)
+
+@mcp.tool()
+async def clan_select(pattern: str, flake_path: str = "."):
+    """Select nixos values from the flake using a pattern (e.g. nixosConfigurations.*.config.networking.hostName)."""
+    return await run_clan(["select", pattern, "--flake", flake_path])
 
 # --- Documentation ---
 
