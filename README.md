@@ -58,7 +58,11 @@ nix develop
 | `template_list`         | List available clan templates.                    |
 | `template_apply`        | Apply a template to a machine.                    |
 | `config_check`          | Validate clan configuration.                      |
+| `docs_list`            | List all documentation files.                     |
+| `docs_read`            | Read specific documentation file.                 |
+| `docs_search`          | Search for query in documentation markdown files. |
 
 ## Resources
 
 - `clan://config/main`: Reads `clan.nix` or `flake.nix` in the current directory.
+- `clan://docs/{path}`: Reads documentation by its relative path.

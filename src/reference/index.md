@@ -1,0 +1,21 @@
+# Overview
+
+This section of the site provides an overview of available options and commands within the Clan Framework.
+
+---
+
+- Learn how to use the [Clan CLI](/docs/reference/cli)
+- Explore available [services](/docs/services/definition)
+- [NixOS Configuration Options](/docs/reference/clan.core) - Additional options available on a NixOS machine.
+
+---
+
+:::admonition[Note]{type=note}
+This documentation is always built for the main branch.
+If you need documentation for a specific commit you can build it on your own
+
+```bash
+nix build 'git+https://git.clan.lol/clan/clan-core?ref=0324f4d4b87d932163f351e53b23b0b17f2b5e15#docs'
+```
+
+:::

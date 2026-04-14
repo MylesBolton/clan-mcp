@@ -1,9 +1,9 @@
 {
   "mcpServers": {
-    "nixos": {
+    "clan-mcp": {
       "type": "stdio",
       "command": "nix",
-      "args": ["run", ".#mcp-nixos"]
+      "args": ["run", ".#clan-mcp"]
     }
   }
 }

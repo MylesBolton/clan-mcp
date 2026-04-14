@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    clan-core.url = "github:clan-lol/clan-core";
   };
 
   outputs =
@@ -11,6 +12,7 @@
       self,
       nixpkgs,
       flake-parts,
+      clan-core,
       ...
     }:
     let
@@ -32,6 +34,13 @@
           dependencies = with python3Packages; [
             fastmcp
           ];
+          
+          nativeBuildInputs = [ pkgs.makeWrapper ];
+
+          postInstall = ''
+            wrapProgram $out/bin/clan-mcp \
+              --prefix PATH : ${pkgs.lib.makeBinPath [ clan-core.packages.${pkgs.system}.clan-cli pkgs.nix ]}
+          '';
 
           pythonRelaxDeps = true;
           dontCheckRuntimeDeps = true;
@@ -124,6 +133,8 @@
               build
               ruff
               mypy
+              clan-core.packages.${system}.clan-cli
+              pkgs.nix
             ];
           };
         };
